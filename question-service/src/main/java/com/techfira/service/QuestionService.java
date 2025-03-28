@@ -14,10 +14,14 @@ import java.util.NoSuchElementException;
 @Service
 public class QuestionService {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+
+    private final QuestionRepository questionRepository;
 
     private final QuestionMapper mapper = QuestionMapper.INSTANCE;
+
+    public QuestionService(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     public QuestionDTO createQuestion(QuestionDTO questionDTO) {
         Question question = mapper.toEntity(questionDTO);

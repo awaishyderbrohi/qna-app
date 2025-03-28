@@ -14,12 +14,15 @@ import java.util.List;
 @Service
 public class AnswerService {
 
-    @Autowired
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
 
     private final AnswerMapper mapper = AnswerMapper.INSTANCE;
 
-   public AnswerDTO create(AnswerDTO answerDTO){
+    public AnswerService(AnswerRepository answerRepository) {
+        this.answerRepository = answerRepository;
+    }
+
+    public AnswerDTO create(AnswerDTO answerDTO){
 
         Answer answer = mapper.toEntity(answerDTO);
        Answer savedAnswer = answerRepository.save(answer);

@@ -7,7 +7,9 @@ import com.techfira.entity.User;
 import com.techfira.exception.CustomException;
 import com.techfira.mapper.UserMapper;
 import com.techfira.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +22,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper mapper = UserMapper.INSTANCE;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     public UserResDTO save(UserReqDTO userReqDTO){
@@ -49,8 +55,8 @@ public class UserService {
     }
 
 
-    public UserResDTO getUserByUsername(UserReqDTO userReqDTO){
-        User byUsername = userRepository.findByUserName(userReqDTO.getUserName());
+    public UserResDTO getUserByUsername(String userName){
+        User byUsername = userRepository.findByUserName(userName);
         return mapper.toDTO(byUsername);
     }
 
@@ -82,4 +88,12 @@ public class UserService {
     }
 
 
+    public String verify(UserReqDTO userReqDTO) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userReqDTO.getUserName(),userReqDTO.getPassword()));
+        if (authenticate.isAuthenticated()){
+            return jwtService.generateToken(userReqDTO);
+        }
+            return "Failed!";
+
+    }
 }

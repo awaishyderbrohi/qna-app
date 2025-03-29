@@ -45,4 +45,10 @@ public class GlobalExceptionHandler {
         return new String(ex.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String exception(Exception ex){
+        return new String("Sorry! check your username and password");
+    }
+
 }

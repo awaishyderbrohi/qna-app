@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class UserController {
 
@@ -22,10 +24,11 @@ public class UserController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/user/{username}")
     public ResponseEntity<UserResDTO> findByUserName(){
         String authUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResDTO userByUsername = userService.getUserByUsername(authUserName);
         return ResponseEntity.ok(userByUsername);
     }
+
 }

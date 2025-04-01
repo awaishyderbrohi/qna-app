@@ -38,13 +38,14 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    //    Handle Custom Exceptions
+    //    Handles Custom Exceptions
     @ExceptionHandler(CustomException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String customExceptionHandler(CustomException ex) {
         return new String(ex.getMessage());
     }
 
+//    Handles UnAuthorized exceptionss
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String exception(Exception ex){

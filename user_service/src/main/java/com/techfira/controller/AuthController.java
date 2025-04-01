@@ -9,11 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class PublicController {
+@RequestMapping("/auth")
+public class AuthController {
     @Autowired
     private final UserService userService;
 
-    public PublicController(UserService userService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
     }
 
